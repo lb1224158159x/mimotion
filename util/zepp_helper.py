@@ -127,21 +127,8 @@ def grant_login_tokens(access_token, device_id, is_phone=False) -> (str | None, 
             "source": "com.xiaomi.hm.health:6.14.0:50818",
             "third_name": "email",
         }
-    # resp = requests.  #  resp = requests.  #  resp = requests.po
-    # === 修改开始 ===
-    try:
-        response = requests.post(url, data=data, headers=headers, timeout=10)
-        # 打印调试信息，如果报错，去日志里看 "DEBUG RESPONSE" 后的内容
-        if response.status_code != 200:
-             print(f"DEBUG RESPONSE [Status {response.status_code}]: {response.text}")
-             return None, None, None, f"请求被拦截，状态码: {response.status_code}"
-        
-        resp = response.json()
-    except Exception as e:
-        print(f"解析JSON失败，服务器可能返回了HTML页面。错误: {e}")
-        # 这里能防止程序直接崩溃
-        return None, None, None, "JSON解析失败(可能是IP被封)"
-    # === 修改结束 ===
+    resp = requests.post(url, data=data, headers=headers).json()
+
     # print("请求客户端登录成功：%s" % json.dumps(resp, ensure_ascii=False, indent=2))  #
     _login_token, _userid, _app_token = None, None, None
     try:
